@@ -1,0 +1,8 @@
+apiVersion: demo.transwarp.io/v1alpha1
+kind: RollingMonitor12
+metadata:
+  name: rollingmonitor12-sample
+  namespace: nju12
+spec:
+  # TODO(user): Add fields here
+  deploymentName: cloud-native-homework
