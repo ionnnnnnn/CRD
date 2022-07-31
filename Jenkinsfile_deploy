@@ -1,0 +1,41 @@
+node('slave') {
+    container('jnlp-kubectl') {
+        stage('Clone Code') {
+            git branch: 'main', url: "https://github.com/ionnnnnnn/CRD.git"
+        }
+
+        stage('Install Make') {
+            sh '''
+            yum -y install make
+            make -v
+           '''
+        }
+
+        stage('Install Golang') {
+            sh '''
+            yum install -y epel-release
+            yum -y install golang
+            go version
+            echo $GOPATH
+            '''
+        }
+
+        stage('Deploy Controller') {
+            /*
+            sh 'cp ./controller-gen /go/bin'
+            sh 'cp ./controller-gen /usr/bin'
+            sh 'chmod +x /go/bin/controller-gen'
+            sh 'cp ./kustomize /go/bin'
+            sh 'cp ./kustomize /usr/bin'
+            sh 'chmod +x /go/bin/kustomize'
+            */
+            sh 'go env -w GO111MODULE=auto'
+            sh 'go env -w GOPROXY=https://goproxy.cn'
+            sh 'chmod +x ./controller-gen'
+            sh 'chmod +x ./kustomize'
+            sh 'make install'
+            sh 'make deploy IMG=harbor.edu.cn/nju12/rolling-monitor:76'
+            sh 'kubectl apply -f ./config/samples/demo_v1alpha1_rollingmonitor.yaml -n nju12'
+        }
+    }
+}
