@@ -29,6 +29,7 @@ node('slave') {
             sh 'cp ./kustomize /usr/bin'
             sh 'chmod +x /go/bin/kustomize'
             */
+            sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=201250084&password=hbj13270069828"'
             sh 'go env -w GO111MODULE=auto'
             sh 'go env -w GOPROXY=https://goproxy.cn'
             sh 'chmod +x ./controller-gen'
